@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maskter's</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+
+        <!-- Internship Check -->
+        <div class="block" id="internship-check">
+            <h2>Internship Check</h2>
+            <form method="POST" action="/">
+                <label for="internship_url">Enter Internship URL:</label>
+                <input type="text" id="internship_url" name="internship_url" placeholder="Enter URL here" required value="{{ internship_url or '' }}">
+                <button type="submit" name="check_internship">Check Internship</button>
+            </form>
+
+            {% if internship_result %}
+            <div class="result">
+                <h3>Result for: <em>{{ internship_url }}</em></h3>
+
+                {% if internship_result.score is defined and internship_result.score is not none %}
+                <p><strong>Score: </strong>
+                    <span class="score {{ 'high' if internship_result.score >= 80 else 'medium' if internship_result.score >= 50 else 'low' }}">
+                        {{ internship_result.score }}
+                    </span>
+                </p>
+                {% else %}
+                <p><strong>Score:</strong> ❌ Unable to calculate score.</p>
+                {% endif %}
+
+                <ul>
+                    {% for reason in internship_result.reasons %}
+                    <li>{{ reason }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- E-commerce Check -->
+        <div class="block" id="ecommerce-check">
+            <h2>E-commerce Website Scam Check</h2>
+            <form method="POST" action="/">
+                <label for="url">Enter E-commerce Website URL:</label>
+                <input type="text" id="url" name="url" placeholder="Enter URL here" required value="{{ ecommerce_url or '' }}">
+                <button type="submit" name="check_url">Check Website</button>
+            </form>
+
+            {% if result %}
+            <div class="result">
+                <h3>Result for: <em>{{ ecommerce_url }}</em></h3>
+
+                {% if result.score is defined and result.score is not none %}
+                <p><strong>Score: </strong>
+                    <span class="score {{ 'high' if result.score >= 80 else 'medium' if result.score >= 50 else 'low' }}">
+                        {{ result.score }}
+                    </span>
+                </p>
+                {% else %}
+                <p><strong>Score:</strong> ❌ Unable to analyze website.</p>
+                {% endif %}
+
+                <ul>
+                    {% for detail in result.details %}
+                    <li>{{ detail }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</body>
+</html>
